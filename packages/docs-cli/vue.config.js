@@ -1,5 +1,14 @@
 module.exports = {
-  "transpileDependencies": [
-    "vuetify"
-  ]
+  devServer: {
+    disableHostCheck: true,
+    port: 8081,
+  },
+  configureWebpack: {
+    resolve: {
+      symlinks: false,
+    },
+  },
+  transpileDependencies: [
+    'vuetify',
+  ],
 }
