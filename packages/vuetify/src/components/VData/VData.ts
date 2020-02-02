@@ -32,8 +32,8 @@ export default Vue.extend({
       default: () => [],
     },
     sortDesc: {
-      type: [Boolean, Array] as PropType<boolean | boolean[]>,
-      default: () => [],
+      type: [Boolean, Array] as PropType<undefined | boolean | boolean[]>,
+      default: undefined,
     },
     customSort: {
       type: Function as PropType<DataSortFunction>,
@@ -219,7 +219,7 @@ export default Vue.extend({
       this.updateOptions({ sortDesc: wrapInArray(sortDesc) })
     },
     'internalOptions.sortDesc' (sortDesc: boolean[], old: boolean[]) {
-      !deepEqual(sortDesc, old) && this.$emit('update:sort-desc', Array.isArray(this.sortDesc) ? sortDesc : sortDesc[0])
+      !deepEqual(sortDesc, old) && this.$emit('update:sort-desc', Array.isArray(this.sortDesc) || this.multiSort ? sortDesc : sortDesc[0])
     },
     groupBy (groupBy: string | string[]) {
       this.updateOptions({ groupBy: wrapInArray(groupBy) })

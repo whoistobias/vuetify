@@ -436,4 +436,80 @@ describe('VData.ts', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  // https://github.com/vuetifyjs/vuetify/issues/9267
+  it('should always emit sort-desc as the same form as the prop passed in', async () => {
+    const unsorted = [
+      { id: 1, text: 'c' },
+      { id: 2, text: 'a' },
+      { id: 3, text: 'd' },
+      { id: 4, text: 'b' },
+    ]
+
+    const wrapperA = mountFunction({
+      propsData: {
+        items: unsorted,
+        sortDesc: undefined,
+      },
+      scopedSlots: {
+        default (props) {
+          const items = props.items.map(item => this.$createElement('div', [item.text]))
+          return this.$createElement('div', {
+            attrs: {
+              id: 'wrapper',
+            },
+            on: {
+              click: () => props.sort('text'),
+            },
+          }, items)
+        },
+      },
+    })
+
+    const elA = wrapperA.find('#wrapper').element
+
+    elA.click()
+    await wrapperA.vm.$nextTick()
+    elA.click()
+    await wrapperA.vm.$nextTick()
+    elA.click()
+    await wrapperA.vm.$nextTick()
+    elA.click()
+    await wrapperA.vm.$nextTick()
+
+    expect(wrapperA.emitted()['update:sort-desc']).toEqual([[false], [true], [undefined], [false]])
+
+    const wrapperB = mountFunction({
+      propsData: {
+        items: unsorted,
+        sortDesc: [undefined],
+      },
+      scopedSlots: {
+        default (props) {
+          const items = props.items.map(item => this.$createElement('div', [item.text]))
+          return this.$createElement('div', {
+            attrs: {
+              id: 'wrapper',
+            },
+            on: {
+              click: () => props.sort('text'),
+            },
+          }, items)
+        },
+      },
+    })
+
+    const elB = wrapperB.find('#wrapper').element
+
+    elB.click()
+    await wrapperB.vm.$nextTick()
+    elB.click()
+    await wrapperB.vm.$nextTick()
+    elB.click()
+    await wrapperB.vm.$nextTick()
+    elB.click()
+    await wrapperB.vm.$nextTick()
+
+    expect(wrapperB.emitted()['update:sort-desc']).toEqual([[[false]], [[true]], [[]], [[false]]])
+  })
 })
