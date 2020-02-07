@@ -294,13 +294,10 @@ export default baseMixins.extend<options>().extend({
     genClearIcon () {
       if (!this.clearable) return null
 
-      const icon = this.isDirty ? 'clear' : ''
+      const data = this.isDirty ? undefined : { attrs: { disabled: true } }
 
       return this.genSlot('append', 'inner', [
-        this.genIcon(
-          icon,
-          this.clearableCallback
-        ),
+        this.genIcon('clear', this.clearableCallback, data),
       ])
     },
     genCounter () {

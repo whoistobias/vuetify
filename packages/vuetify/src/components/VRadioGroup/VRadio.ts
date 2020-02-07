@@ -142,17 +142,17 @@ export default baseMixins.extend<options>().extend({
       return this.$createElement('div', {
         staticClass: 'v-input--selection-controls__input',
       }, [
+        this.$createElement(VIcon, this.setTextColor(this.validationState, {
+          props: {
+            dense: this.radioGroup && this.radioGroup.dense,
+          },
+        }), this.computedIcon),
         this.genInput({
           name: this.computedName,
           value: this.value,
           ...this.attrs$,
         }),
         this.genRipple(this.setTextColor(this.rippleState)),
-        this.$createElement(VIcon, this.setTextColor(this.validationState, {
-          props: {
-            dense: this.radioGroup && this.radioGroup.dense,
-          },
-        }), this.computedIcon),
       ])
     },
     onFocus (e: Event) {
